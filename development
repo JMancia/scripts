@@ -1,0 +1,35 @@
+if ! tmux has-session -t development
+then
+	# start new session an editor window
+	tmux new-session -s development -n editor -d
+
+	# change directory when opening the session
+	tmux send-keys -t development 'cd ~/devproject' C-m
+
+	# open vim when opening the session
+	tmux send-keys -t development 'vim .' C-m
+
+	# open session with the window panes split horizontally
+	tmux split-window -v -p 10 -t development
+
+	# set session window layout
+	tmux select-layout -t development main-horizontal
+
+	# change directory for the 2nd pane in the session
+	tmux send-keys -t development:1.2 'cd ~/devproject' C-m
+
+	# add console window to the session
+	tmux new-window -n console -t development
+
+	# change directory when adding the console window in the session
+	tmux send-keys -t development:2 'cd ~/devproject' C-m
+
+	# select the editor window to be displayed first after opening the session
+	tmux select-window -t development:1
+
+	# select the first pane in the editor window
+	tmux select-pane -t development:1.1
+fi
+
+# open session
+tmux attach -t development
